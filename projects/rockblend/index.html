@@ -1,0 +1,179 @@
+<html lang="en">
+<head>
+  <title>Annie Kelly | RockBlend</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script>
+function rockBlendLoad(){
+  var winWidth =   $( window ).width();
+  var imgs = document.getElementsByName("rbimg");
+  var vids = document.getElementsByName("rbvid");
+  var rblogo = document.getElementById("rblogo");
+  if (winWidth < 976 && winWidth > 494){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "250";
+     }
+     for (var i = 0; i < vids.length; i++){
+       vids[i].width = "300";
+       vids[i].height = "150";
+     }     
+  }
+  else if (winWidth <= 494){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "200";
+     }
+     for (var i = 0; i < vids.length; i++){
+       vids[i].width = "300";
+       vids[i].height = "150";
+     }      
+     rblogo.width = "250";
+  }
+  else if (winWidth >= 976){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "500";
+     }
+     for (var i = 0; i < vids.length; i++){
+       vids[i].width = "550";
+       vids[i].height = "300";
+     }         
+  }
+}
+
+$(window).load(function() {
+  rockBlendLoad();
+});
+
+$( window ).resize(function() {
+  rockBlendLoad();
+});
+
+$(window).scroll(function(){
+  $("#div").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
+});
+</script>
+
+
+</head>
+<body id="style-7" style="overflow: scroll;">
+
+<div class="content" id="style-7" style="background-color:rgba(0,0,0,0.6);">
+  <br><br>
+  
+    <p><img id="rblogo" src="/images/rockblend.png" width="500px"></p><br>
+    <!--<p><img name="rbimg" src="/images/mekeys.jpg" width="500px"></p><br>!-->
+    <iframe name="rbvid" src="https://player.vimeo.com/video/160492333" width="550" height="300" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+    <iframe name="rbvid" src="https://player.vimeo.com/video/162915310" width="550" height="300" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+
+   <h4>About RockBlend</h4>
+   <p>
+    Do you have a hard time finding the <b class="rbBold">motivation to practice your instrument?</b><br>
+    Are you looking for a fun way of <b class="rbBold">interacting with music?</b><br>
+    Are you a nerd who's into <b class="rbBold">musical hackery?</b><br>
+    If you said yes to any of the above then RockBlend is for you!<br><br>
+
+    <b class="rbBold">RockBlend allows you to use musical instruments to power your blender!</b>
+   </p>
+
+   <h4>Calling All Hackers / Musicians</h4>
+   <p>If you have a basic working knowledge of <b class="rbBold">Python</b>, <b class="rbBold">MIDI controllers</b>, and <b class="rbBold">circuits</b>...<br>
+    you can configure RockBlend to do so much more! If you are interested in learning more<br>
+    AND/OR setting up RockBlend on your computer then keep reading!</p>
+
+   <h4>Hardware</h4>
+    <p>Here is a basic system diagram:<br>
+    <img name="rbimg" src="/images/rbdiagram.png" width="600px"><br>
+    Here is a list of the hardware I used (many of these can be interchanged with other devices!):
+    <ul>
+    <li><a style="font-size:20px" href="https://www.arduino.cc/en/main/arduinoBoardUno" target="_blank">Arduino Uno</a></li>
+    <li><a style="font-size:20px" href="https://www.adafruit.com/product/268" target="_blank">Power Switch Tail II</a></li>
+    <li>60 key Casio Keyboard</li>
+    <li>Oster 14-Speed Blender</li>
+    <li>2 breadboard jumper cables</li>
+    <li>2 USB cables</li>
+    <li>120VAC wall outlet</li>
+    </ul></p>
+    <p>
+    <b class="rbBold">Note:</b> if you don't want to spend money on a Power Switch Tail (~$25.00-$30.00) OR<br>
+    if you're a circuit wiz who's looking for a challenge you can follow this <a href="https://www.sparkfun.com/tutorials/119">Sparkfun tutorial</a><br>
+    to build a DIY Controllable Power Outlet using a relay board.
+    </p>  
+
+
+   <h4>Software</h4>
+    <h6>Source Code</h6>
+    <p>
+    <a href="https://github.com/shadowfax6894/RockBlend" target="_blank">GitHub Repo</a></p><br>
+    <h6>Tools</h6>
+    <p>
+    <ul>
+      <li> Python 2.7</li>
+      <li> Python Tkinter</li>
+      <li> Python Pygame</li>
+    </ul>   
+   </p>
+
+
+    <h4>How To Use</h4>
+    <h6>Setting up the Arduino and the Power Tail</h6>
+    <p>
+    <ul>
+      <li> Connect a wire from Arduino's digital pin 12 to the PowerTail's + in pin (any Arduino digital pin can
+        <br>be used but you must edit the blender.ino sketch if you wish to do that) </li>
+      <li> Connect a second wire from Arduino's GND pin to the PowerTail's GND pin </li>
+      <li> Plug in your Arduino to the computer via a serial port to give it power and access <br>
+      to serial communication via USB </li>
+      <li> In my GitHub repo you will see a file arduino/blender/blender.ino, upload this to the Arduino </li>
+    </ul>
+    <h6>Setting up your MIDI controller</h6>
+      <p> Plug in and power on your keyboard (or any MIDI device capable of playing 12 pitches) to your computer via USB </p><br>
+    <h6>Starting RockBlend</h6>
+    <p>
+    >> cd src<br>
+    >> python rockblend.py<br>
+    If the serial communication between Arduino and RockBlend fails, or if RockBlend is unable to read MIDI messages, an error message will be displayed
+    </p><br>
+    <h6>Using RockBlend</h6>
+    <p>There are two modes in RockBlend</p>
+    <ul>
+      <li>Freestyle</li>
+      <li>Practice</li>
+    </ul>
+     </p>
+    <p>
+    <b class="rbBold">Freestyle Mode</b> allows you to play music in any key you want. RockBlend counts up how many notes<br>
+    you've played every 2 seconds. If you are above a certain threshold (on my version you have to play around<br>
+    4 notes per second) then the power relay will be turned on and the blender will power on.<br>
+    <br>
+    <b class="rbBold">Practice Mode</b> checks to make sure you are playing your notes accurately. When you select practice<br>
+    mode you will be prompted with a drop down menu that allows you to pick a note and a scale. For instance "C# Minor".<br>
+    If you are playing 80% of the notes in the proper key, then the blender will power on.<br><br>
+
+    <img name="rbimg" src="/images/rockblend.gif" border="1"><br>
+  </p>
+
+  <h4>Guide for Developers</h4>
+  <h6>Breakdown of File Structure</h6>
+  <p>
+  <img src="/images/filestructure.png" width="300"><br><br>
+    <b class="rbBold">arduino/blender/blender.ino</b><br> the file to upload to your Arduino.<br><br>
+    <b class="rbBold">src/rockblend.py</b><br> sets up the Python Tkinter GUI thread and initializes<br>
+    serial and midi communications. This is the main script to run when starting RockBlend.<br><br>
+    <b class="rbBold">src/freestyleMode.py</b><br> Helper functions that spawn listener threads when the user is in freestyle mode.<br><br>
+    <b class="rbBold">src/practiceMode.py</b><br> Helper functions that spawn listener threads when the user is in practice mode.<br><br>
+    <b class="rbBold">src/scales.py</b><br> Helper functions that determine what notes are correct/incorrect when user is in practice mode.<br><br>
+    <b class="rbBold">src/serialComm.py</b><br> All serial communication functions such as intializing a connection, and writing over the serial connection.<br><br>
+    <b class="rbBold">src/midiComm.py</b><br> Contains a helper function to initialize a connection with your MIDI device.<br><br>
+  </p>
+
+  <h4>Want to Know More?</h4>
+  <p>Don't hesitate to reach out and ask me questions at <b class="rbBold">anniekelly6894@gmail.com</b>
+  </p><br><br>
+
+</div>
+
+</body>
+</html>

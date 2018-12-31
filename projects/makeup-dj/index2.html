@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>Makeup DJ</title>
+		<meta charset="utf-8">
+
+		<style>
+			body {
+				background-color: #000000;
+				margin: 0px auto;
+				max-width: 1150px;
+			}
+			#overlay {
+				position: absolute;
+				top: 0px;
+				left: 0px;
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
+			}
+			#videoel {
+				-o-transform : scaleX(-1);
+				-webkit-transform : scaleX(-1);
+				transform : scaleX(-1);
+				-ms-filter : fliph; /*IE*/
+				filter : fliph; /*IE*/
+			}
+			#container {
+				position : relative;
+				width : 1080px;
+				/*margin : 0px auto;*/
+			}
+			#content {
+				margin-top : 0px;
+				margin-left : 0px;
+				margin-right : 0px;
+			}
+			.nogum {
+				display : none;
+			}
+			.hide {
+				display : none;
+			}
+			.nohide {
+				display : block;
+			}
+		</style>
+
+		<script>
+			// getUserMedia only works over https in Chrome 47+, so we redirect to https. Also notify user if running from file.
+			if (window.location.hostname !== "localhost" && window.location.protocol !== "https:"){
+				window.location.protocol = "https";
+			}
+
+		</script>
+
+	</head>
+	<body>
+
+		<div id="content">
+			<div id="container">
+				<video id="videoel" width="100%" height="100%" preload="auto" loop></video>
+				<canvas id="overlay" width="100%" height="100%"></canvas>
+			</div>
+			<br/>
+			<div id="text">
+				<div id="gum" class="gum"></div>
+				<div id="nogum" class="nogum"></div>
+			</div>
+
+			<script src="../../javascript/clmtrackr/clmtrackr.js"></script>
+			<script src="../../javascript/clmtrackr/models/model_pca_20_svm.js"></script>
+
+			<script>
+				var vid     = document.getElementById('videoel');
+				var overlay = document.getElementById('overlay');
+				var vid_width  = vid.width;
+				var vid_height = vid.height;
+				var overlayCC  = overlay.getContext('2d');
+
+				/*********** Setup of video/webcam and checking for webGL support *********/
+
+				function getUserMediaSuccess( stream ) {
+					if ("srcObject" in vid) {
+						vid.srcObject = stream;
+					} else {
+						vid.src = (window.URL && window.URL.createObjectURL(stream));
+					}
+					vid.onloadedmetadata = function() {
+						// resize overlay and video if proportions are different
+						var proportion = vid.videoWidth/vid.videoHeight;
+						vid_width = Math.round(vid_height * proportion);
+						overlay.width = vid.width = vid_width;
+						vid.play();
+					}
+				}
+
+				function getUserMediaFail() {
+					document.getElementById('gum').className = "hide";
+					document.getElementById('nogum').className = "nohide";
+					alert("There was some problem trying to fetch video from your webcam.");
+				}
+
+				navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+				window.URL = window.URL || window.webkitURL || window.msURL || window.mozURL;
+
+				// set up video
+				if (navigator.mediaDevices) {
+					navigator.mediaDevices.getUserMedia({video : true}).then(getUserMediaSuccess).catch(getUserMediaFail);
+				} else if (navigator.getUserMedia) {
+					navigator.getUserMedia({video : true}, getUserMediaSuccess, getUserMediaFail);
+				} else {
+					document.getElementById('gum').className = "hide";
+					document.getElementById('nogum').className = "nohide";
+					alert("Your browser does not seem to support getUserMedia, using a fallback video instead.");
+				}
+
+				/*********** Code for face tracking *********/
+
+				var ctrack = new clm.tracker({useWebGL : true});
+				ctrack.init(pModel);
+				ctrack.start(vid);
+				drawLoop();				
+
+				function drawLoop() {
+					requestAnimationFrame(drawLoop);
+					overlayCC.clearRect(0, 0, vid_width, vid_height);
+					if (ctrack.getCurrentPosition()) {
+						ctrack.draw(overlay);
+					}
+				}
+			</script>
+		</div>
+	</body>
+</html>

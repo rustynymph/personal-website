@@ -1,0 +1,27 @@
+#
+## Alias OBJ Material File
+# Exported from SketchUp, (c) 2000-2012 Trimble Navigation Limited
+
+newmtl _10
+Ka 0.000000 0.000000 0.000000
+Kd 0.862745 0.505882 0.223529
+Ks 0.330000 0.330000 0.330000
+map_Kd pizza/_10.png
+
+newmtl _9
+Ka 0.000000 0.000000 0.000000
+Kd 0.658824 0.156863 0.098039
+Ks 0.330000 0.330000 0.330000
+map_Kd pizza/_9.png
+
+newmtl FoodVarious0016_1_S
+Ka 0.000000 0.000000 0.000000
+Kd 0.705882 0.584314 0.407843
+Ks 0.330000 0.330000 0.330000
+map_Kd pizza/crust.png
+
+newmtl _2
+Ka 0.000000 0.000000 0.000000
+Kd 0.929412 0.929412 0.929412
+Ks 0.330000 0.330000 0.330000
+

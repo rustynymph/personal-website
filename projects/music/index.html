@@ -1,0 +1,60 @@
+<html lang="en">
+<head>
+  <title>Annie Kelly | Music</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  
+<script>
+function resizeMusicVideos(){
+var winWidth =   $( window ).width();
+  if (winWidth < 976){
+     var imgs = document.getElementsByName("musicvid");
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "300";
+      imgs[i].height = "300";
+     }
+  }
+  else{
+     var imgs = document.getElementsByName("musicvid");
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "400";
+      imgs[i].height = "400";
+     }    
+  }
+}
+
+$(window).load(function() {
+  resizeMusicVideos();
+});
+
+$( window ).resize(function() {
+  resizeMusicVideos();
+});
+</script>
+
+</head>
+<body style="overflow: scroll;">
+
+</div>
+<div class="content" style="overflow-y: auto;" id="style-7">
+  <h4>Live Demos:</h4>
+    <a href="/gallery/music/visualizers/circle">Circle</a><br>
+    <a href="/gallery/music/visualizers/spikeyball">Spikey Ball</a><br>
+    <a href="/gallery/music/visualizers/grid">Grid</a><br>
+  <h4>Videos:</h4>
+  <iframe name="musicvid" src="https://player.vimeo.com/video/149521487" width="400" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <iframe name="musicvid" src="https://player.vimeo.com/video/147514928" width="400" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <iframe name="musicvid" src="https://player.vimeo.com/video/146855021" width="400" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <iframe name="musicvid" src="https://player.vimeo.com/video/146840860" width="400" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <iframe name="musicvid" src="https://player.vimeo.com/video/146735077" width="400" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+  <br><br>
+  <br><br>
+  <br>
+</div>
+</body>
+</html>
+

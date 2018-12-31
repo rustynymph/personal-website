@@ -1,0 +1,63 @@
+<html lang="en">
+<head>
+  <title>Annie Kelly | Red Hair</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/large.css">
+  <link rel="stylesheet" media='screen and (min-width: 977px) and (max-width: 1283px)' href="/css/medium.css">
+  <link rel="stylesheet" media='screen and (min-width: 495px) and (max-width: 976px)' href="/css/small.css">
+  <link rel="stylesheet" media='screen and (max-width: 494px)' href="/css/narrow.css">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="/javascript/navbar.js"></script>
+<script>
+
+$(window).load(function() {
+  resizeNav();
+});
+
+$( window ).resize(function() {
+  resizeNav();
+});
+
+$(window).scroll(function(){
+  $("#div").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
+});
+</script>
+
+
+</head>
+<body  id="style-7">
+
+<div class="logo_container" id="logo"><img id="name" src="/images/namesmall.png"></div>
+<div class="nav_container" id="nav"></div>
+
+<div class="content" id="style-7" style="background-color:rgba(0,0,0,0.6);">
+  <center>
+    <a href="/gallery/hair/">back</a><br><br>
+    Photos have not been edited/retouched except where it is noted.<br>
+  </center>
+  <br><br>
+
+  <div id="before">
+    before<br>
+    <img src="/images/hair/blonde/gaga.jpg">
+  </div>
+  <div id="after">
+    after<br>
+    <img src="/images/hair/red/side.jpg">
+  </div><br>
+  <div id="products">
+    products
+  </div>
+  <div id="process">
+    products
+  </div>
+  <div id="photos">
+    more photos
+  </div>    
+</div>
+
+</body>
+</html>

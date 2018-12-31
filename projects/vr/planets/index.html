@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Space</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			#container {
+				background: #000;
+               	padding:0;
+				margin:0;
+                overflow: hidden;
+			}
+		</style>
+	</head>
+
+	<body>
+	<div id="container"></div>
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+	<script type="text/javascript" src="../threejs/build/three.min.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/loaders/ColladaLoader.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/controls/FlyControls.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/effects/StereoEffect.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/controls/DeviceOrientationControls.js"></script>
+	<script type="text/javascript" src="/javascript/key_status.js"></script>
+	<script type="text/javascript" src="/javascript/jquery.hotkeys.js"></script>	
+	<script type="text/javascript" src="/javascript/music/screen.js"></script>	
+	<script type="text/javascript">
+
+	var WIDTH = window.innerWidth;
+    var HEIGHT = window.innerHeight;
+	
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+	var container = document.getElementById("container");
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(WIDTH, HEIGHT);
+
+    effect = new THREE.StereoEffect(renderer);
+    effect.setSize(WIDTH, HEIGHT);
+
+    var element = renderer.domElement;
+    $('#container').append(element);
+
+	// Set some camera attributes
+    var CAMERA_ANGLE = 45; // field of view
+    var ASPECT_RATIO = WIDTH / HEIGHT;
+    var NEAR_PLANE = 0.1;
+    var FAR_PLANE = 10000;
+        
+	// Set-up a Camera
+    var camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
+        ASPECT_RATIO,
+        NEAR_PLANE, FAR_PLANE
+        );
+	// Camera stuff
+	camera.position.z = 200;
+	camera.position.y = 5;
+    scene.add(camera);
+
+    // Light stuff
+    var ambientLight = new THREE.AmbientLight(0xffffff); 
+	scene.add(ambientLight);
+
+    var planetGeo = new THREE.SphereGeometry(50, 35, 35);
+    var planetMaterial;
+    var planet;
+
+    var planetGeo2 = new THREE.SphereGeometry(25, 35, 35);
+    var planetMaterial2;
+    var planet2;    
+
+    var planetGeo3 = new THREE.SphereGeometry(25, 35, 35);
+    var planetMaterial3;
+    var planet3; 
+
+    var planetGeo4 = new THREE.SphereGeometry(25, 35, 35);
+    var planetMaterial4;
+    var planet4;     
+
+	var skyGeo = new THREE.SphereGeometry(8000, 25, 25); 
+	var skyMaterial;
+	var sky;
+
+	var textureLoader = new THREE.TextureLoader();
+	textureLoader.load("/images/space3.jpg", function(texture){
+	    skyMaterial = new THREE.MeshPhongMaterial({ 
+	        map: texture
+		});
+	    textureLoader.load("/images/planet.jpg", function(texture){
+	    	planetMaterial = new THREE.MeshPhongMaterial({ 
+	       		 map: texture
+			});
+			textureLoader.load("/images/planet2.jpg", function(texture){
+	    		planetMaterial2 = new THREE.MeshPhongMaterial({ 
+	       	 		map: texture
+				});
+				textureLoader.load("/images/planet3.jpg", function(texture){
+		    		planetMaterial3 = new THREE.MeshPhongMaterial({ 
+		       	 		map: texture
+					});
+					textureLoader.load("/images/planet4.jpg", function(texture){
+			    		planetMaterial4 = new THREE.MeshPhongMaterial({ 
+			       	 		map: texture
+						});
+			  			init(); 		
+			 	  	});			  			
+		 	  	});	  			 		
+	 	  	});
+	    });
+	});
+
+	function init(){
+	    sky = new THREE.Mesh(skyGeo, skyMaterial);
+	    sky.material.side = THREE.BackSide;
+	    sky.material.map.wrapS = THREE.RepeatWrapping; 
+	    sky.material.map.wrapT = THREE.RepeatWrapping;
+	    sky.material.map.repeat.set(20, 20);	    
+	    scene.add(sky);
+
+		planet = new THREE.Mesh(planetGeo, planetMaterial);
+		planet.position.z = -150;
+	    planet.material.map.wrapS = THREE.RepeatWrapping; 
+	    planet.material.map.wrapT = THREE.RepeatWrapping;
+		scene.add(planet);
+
+		planet2 = new THREE.Mesh(planetGeo2, planetMaterial2);
+		planet2.position.x = -250;
+		planet2.position.z = -250;
+	    planet2.material.map.wrapS = THREE.RepeatWrapping; 
+	    planet2.material.map.wrapT = THREE.RepeatWrapping;
+		scene.add(planet2);
+
+		planet3 = new THREE.Mesh(planetGeo3, planetMaterial3);
+		planet3.position.x = 200;
+		planet3.position.y = 150;
+		planet3.position.z = -350;
+	    planet3.material.map.wrapS = THREE.RepeatWrapping; 
+	    planet3.material.map.wrapT = THREE.RepeatWrapping;
+		scene.add(planet3);
+
+		planet4 = new THREE.Mesh(planetGeo4, planetMaterial4);
+		planet4.position.x = 250;
+		planet4.position.y = -150;
+		planet4.position.z = -350;
+	    planet4.material.map.wrapS = THREE.RepeatWrapping; 
+	    planet4.material.map.wrapT = THREE.RepeatWrapping;
+		scene.add(planet4);
+
+	    var gridXY = new THREE.GridHelper(250, 50, 0xff00ff, 0xff00ff);
+	    //scene.add(gridXY)
+
+		window.addEventListener("resize", function(){resize();}, true);
+
+	    // Controls
+	    element.addEventListener('click', fullscreen, false);
+		controls = new THREE.FlyControls(camera);
+		controls.movementSpeed = 300;
+		controls.domElement = container;
+		controls.rollSpeed = Math.PI / 24;
+		controls.autoForward = false;
+		controls.dragToLook = true;
+		
+	    function setOrientationControls(e) {
+	      if (!e.alpha) {
+	        return;
+	      }
+		  camera.position.z = 400;
+		  camera.position.y = 20;
+		  camera.rotation.x = -15 * Math.PI / 180;
+
+		  controls = new THREE.DeviceOrientationControls(camera, true);
+	      controls.connect();
+	      controls.update();
+
+	      window.removeEventListener('deviceorientation', setOrientationControls, true);
+	    }
+	    window.addEventListener('deviceorientation', setOrientationControls, true);
+
+		/* process input, update model, draw */
+	    var clock = new THREE.Clock;
+		var delta;
+		var timestep = 1000 / 60;
+	    function mainLoop() {
+			delta = clock.getDelta();
+
+			/* listen for both device controls and keyboard controls */
+			if (controls != null) controls.update(delta);
+			processInput();
+
+			while (delta >= timestep) {
+				camera.updateProjectionMatrix();
+				delta -= timestep;
+			} 			
+
+	        effect.render(scene, camera); // vr
+	        //renderer.render(scene, camera);
+	        requestAnimationFrame(mainLoop);
+	    }
+	    mainLoop();   
+	}
+
+	function updateModels(){
+		planet.rotation.x += 0.01 * Math.PI / 180;
+		planet.rotation.y += 0.01 * Math.PI / 180;
+		planet.rotation.z += 0.01 * Math.PI / 180;
+
+		planet2.rotation.x += 0.01 * Math.PI / 180;
+		planet2.rotation.y -= 0.01 * Math.PI / 180;
+		planet2.rotation.z -= 0.01 * Math.PI / 180;
+
+		planet3.rotation.x += 0.01 * Math.PI / 180;
+		planet3.rotation.y -= 0.01 * Math.PI / 180;
+		planet3.rotation.z -= 0.01 * Math.PI / 180;		
+	}
+
+	var rotateAmount = 2 * Math.PI / 180;
+	function processInput() { // note, the way I've oriented the scene z is up down, y is back to front, x is left to right
+		if (keydown.w){
+			direction = camera.getWorldDirection();
+			camera.position.add(direction);
+		}
+		if (keydown.left){
+			camera.rotation.y += rotateAmount;
+		}
+		if (keydown.right) {
+			camera.rotation.y -= rotateAmount;
+		}
+		if (keydown.up){
+			camera.rotation.x += rotateAmount;
+		}
+		if (keydown.down){
+			camera.rotation.x -= rotateAmount;
+		}		
+		//console.log("rot: ", camera.rotation, " pos: ", camera.position);
+	}
+	</script>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<title>Musical Atmosphere</title>
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			#container {
+				background: #000;
+               	padding:0px;
+				margin:0px;
+                overflow: hidden;
+			}
+		</style>
+	</head>
+	<body style="padding:0; margin:0; overflow: hidden;">
+	<div id="container"></div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascript/p5.min.js"></script>
+    <script type="text/javascript" src="/javascript/addons/p5.sound.min.js"></script>	
+	<script type="text/javascript" src="../threejs/build/three.min.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/loaders/ColladaLoader.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/controls/FlyControls.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/effects/StereoEffect.js"></script>
+	<script type="text/javascript" src="../threejs/examples/js/controls/DeviceOrientationControls.js"></script>
+	<script type="text/javascript" src="/javascript/key_status.js"></script>
+	<script type="text/javascript" src="/javascript/jquery.hotkeys.js"></script>	
+	<script type="text/javascript" src="/javascript/music/controls.js"></script>	
+	<script type="text/javascript" src="/javascript/music/textures.js"></script>	
+	<script type="text/javascript" src="/javascript/music/screen.js"></script>	
+	<script type="text/javascript" src="/javascript/music/particles.js"></script>	
+	<script type="text/javascript">
+
+	var scene;
+	var container;
+	var renderer;
+	var effect;
+	var camera;
+	var controls;
+	var materialArray = [];
+	var song;
+
+	loadTextures();
+
+	function init(){
+		song = new p5.SoundFile('/media/audio/atmosphere.mp3', loopMusic);
+		var WIDTH = window.innerWidth;
+		var HEIGHT = window.innerHeight;
+		
+	    scene = new THREE.Scene();
+	    scene.background = new THREE.Color(0x000000);
+		container = document.getElementById("container");
+
+	    renderer = new THREE.WebGLRenderer({antialias:true});
+	    renderer.setSize(WIDTH, HEIGHT);
+
+	    effect = new THREE.StereoEffect(renderer);
+	    effect.setSize(WIDTH, HEIGHT);
+
+		// Link the renderer to the webpage
+		element = renderer.domElement;
+	    $('#container').append(element);
+
+		// Camera
+	    var CAMERA_ANGLE = 45;
+	    var ASPECT_RATIO = WIDTH / HEIGHT;
+	    var NEAR_PLANE = 0.1;
+	    var FAR_PLANE = 10000;
+	    camera = new THREE.PerspectiveCamera(CAMERA_ANGLE,
+	        ASPECT_RATIO,
+	        NEAR_PLANE, FAR_PLANE
+	        );
+		camera.position.z = 400;
+		camera.position.y = 20;
+	    scene.add(camera);
+
+		window.addEventListener("resize", function(){resize();}, true);
+
+	    // Controls
+	    element.addEventListener('click', fullscreen, false);
+		controls = new THREE.FlyControls(camera);
+		controls.movementSpeed = 300;
+		controls.domElement = container;
+		controls.rollSpeed = Math.PI / 24;
+		controls.autoForward = false;
+		controls.dragToLook = true;
+		
+	    function setOrientationControls(e) {
+	      if (!e.alpha) {
+	        return;
+	      }
+		  camera.position.z = 400;
+		  camera.position.y = 20;
+		  camera.rotation.x = -15 * Math.PI / 180;
+
+		  controls = new THREE.DeviceOrientationControls(camera, true);
+	      controls.connect();
+	      controls.update();
+
+	      window.removeEventListener('deviceorientation', setOrientationControls, true);
+	    }
+	    window.addEventListener('deviceorientation', setOrientationControls, true);
+
+	    // Light stuff
+	    var ambientLight = new THREE.AmbientLight(0xffffff); 
+		scene.add(ambientLight);
+
+		// custom global variables
+		var mirrorCube, mirrorCubeCamera; // for mirror material
+		var mirrorSphere, mirrorSphereCamera; // for mirror material
+		var snowyParticles = new PrettyParticles(1800, 10, THREE.ImageUtils.loadTexture("/images/music/particle.png"));
+
+		/* skybox */
+		for (var i = 0; i < 6; i++){
+		   materialArray[i].side = THREE.BackSide;
+		}
+		var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
+		var skyboxGeom = new THREE.CubeGeometry(5000, 5000, 5000, 1, 1, 1);
+		var skybox = new THREE.Mesh(skyboxGeom, skyboxMaterial);
+		scene.add(skybox);
+
+		/* mirror */
+		var sphereGeom =  new THREE.SphereGeometry(50, 32, 32); // radius, segmentsWidth, segmentsHeight
+		mirrorSphereCamera = new THREE.CubeCamera(0.1, 5000, 512);
+		// mirrorCubeCamera.renderTarget.minFilter = THREE.LinearMipMapLinearFilter;
+		scene.add(mirrorSphereCamera);
+		var mirrorSphereMaterial = new THREE.MeshBasicMaterial( { envMap: mirrorSphereCamera.renderTarget } );
+		mirrorSphere = new THREE.Mesh( sphereGeom, mirrorSphereMaterial );
+		mirrorSphere.position.set(0,0,0);
+		mirrorSphereCamera.position = mirrorSphere.position;
+		scene.add(mirrorSphere);	
+
+		/* particles */
+		scene.add(snowyParticles.particleSystem);	
+
+		/* process input, update model, draw */
+	    var clock = new THREE.Clock;
+		var delta;
+		var timestep = 1000 / 60;
+	    function mainLoop() {
+			delta = clock.getDelta();
+
+			/* listen for both device controls and keyboard controls */
+			if (controls != null) controls.update(delta);
+			processInput();
+
+			while (delta >= timestep) {
+				camera.updateProjectionMatrix();
+				delta -= timestep;
+			} 			
+
+			/* mirror updates */
+			mirrorSphere.visible = false;
+			mirrorSphereCamera.updateCubeMap(renderer, scene);
+			mirrorSphere.visible = true;			
+
+			/* particle updates */
+			snowyParticles.update();					
+
+	        effect.render(scene, camera); // vr
+	        //renderer.render(scene, camera);
+	        requestAnimationFrame(mainLoop);
+	    }
+	    mainLoop();  
+	}
+
+	function loopMusic(){
+		song.setVolume(0.1);
+  		song.loop();
+	}
+	</script>
+</html>

@@ -1,0 +1,79 @@
+<html lang="en">
+<head>
+  <title>Annie Kelly | Cryo3d</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/large.css">
+  <link rel="stylesheet" media='screen and (min-width: 977px) and (max-width: 1283px)' href="/css/medium.css">
+  <link rel="stylesheet" media='screen and (min-width: 495px) and (max-width: 976px)' href="/css/small.css">
+  <link rel="stylesheet" media='screen and (max-width: 494px)' href="/css/narrow.css">
+  <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="/javascript/navbar.js"></script>
+<script>
+function cryoLoad(){
+  var winWidth =   $( window ).width();
+  var imgs = document.getElementsByName("cryoimg");
+  var cryogif = document.getElementById("cryogif");
+  if (winWidth < 976 && winWidth > 494){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "550";
+     }
+     cryogif.width=550;
+     cryogif.height=300;          
+  }
+  else if (winWidth <= 494){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "300";
+     }   
+     cryogif.width=300;
+     cryogif.height=160;
+  }
+  else if (winWidth >= 976){
+     for (var i = 0; i < imgs.length; i++){
+      imgs[i].width = "550";
+     }
+     cryogif.width=550;
+     cryogif.height=300;          
+  }
+}
+
+$(window).load(function() {
+  cryoLoad();
+  resizeNav();
+});
+
+$( window ).resize(function() {
+  cryoLoad();
+  resizeNav();
+});
+
+$(window).scroll(function(){
+  $("#div").css({"margin-top": ($(window).scrollTop()) + "px", "margin-left":($(window).scrollLeft()) + "px"});
+});
+</script>
+
+
+</head>
+<body  id="style-7">
+
+<div class="logo_container" id="logo"><img id="name" src="/images/namesmall.png"></div>
+<div class="nav_container" id="nav">
+</div>
+
+<div class="content" id="style-7" style="background-color:rgba(0,0,0,0.6);">
+  <br><br>
+<p><img name="cryoimg" src="/images/cryo3dlogo.png" width="550"></p><br>
+<p>Cryo3D is a tool for visualizing snow and ice data in 3D. Built using Javascript and the CesiumJS framework, <br>Cryo3D helps your data come to life in both your web browser and virtual reality headset. Our goal is to combine <br>powerful visualization with a data-driven approach to educate and promote climate change awareness <br>around the world.<br>
+<a href="https://github.com/cryo3d/cryo3d">GitHub</a><br>
+<a href="http://cryo3d.github.io/cryo3d/">Wiki</a><br>
+</p>
+<br>
+<p><img name="cryoimg" src="/images/cryo3d.png" width="550"></p><br>
+<p><img id="cryogif" src="/images/cryotour.gif" width="550" height="300"></p><br>
+
+</div>
+
+</body>
+</html>
