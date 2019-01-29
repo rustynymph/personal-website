@@ -102,12 +102,19 @@ h6 {
     background-color: #F05F40;
     border-color: #F05F40;
     color: #000;
+
+    -webkit-animation-name: rainbowbutton; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: rainbowbutton;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
   }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
     color: #F05F40;
     background-color: #000 !important;
   }
+
 
   @font-face {
     font-family: "One Two Trees";
@@ -123,3 +130,63 @@ h6 {
       font-size: 5rem;
       font-family: 'One Two Trees', Arial, sans-serif;
   }
+
+  
+  .animated-text {
+    color: red;
+    -webkit-animation-name: rainbowtext; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 4s; /* Safari 4.0 - 8.0 */
+    animation-name: rainbowtext;
+    animation-duration: 4s;
+    animation-iteration-count: infinite;
+    margin: 0px;
+    padding: 0px;
+  }
+  
+  /* Safari 4.0 - 8.0 */
+  @-webkit-keyframes rainbowtext {
+    0%   {color: red;}
+    25%  {color: yellow;}
+    50%  {color: blue;}
+    100% {color: green;}
+  }
+  
+  /* Standard syntax */
+  @keyframes rainbowtext {
+    0%   {color: red;}
+    25%  {color: yellow;}
+    50%  {color: blue;}
+    100% {color: green;}
+  }
+
+    /* Safari 4.0 - 8.0 */
+    @-webkit-keyframes rainbowbutton{
+      0%   {background-color: red;}
+      25%  {background-color: yellow;}
+      50%  {background-color: blue;}
+      100% {background-color: green;}
+    }
+    
+    /* Standard syntax */
+    @keyframes rainbowbutton {
+      0%   {background-color: red;}
+      25%  {background-color: yellow;}
+      50%  {background-color: blue;}
+      100% {background-color: green;}
+    }
+
+      /* Safari 4.0 - 8.0 */
+      @-webkit-keyframes rainbowbutton2{
+        0%   {background-color: blue;}
+        25%  {background-color: green;}
+        50%  {background-color: red;}
+        100% {background-color: yellow;}
+      }
+      
+      /* Standard syntax */
+      @keyframes rainbowbutton2 {
+        0%   {background-color: blue;}
+        25%  {background-color: green;}
+        50%  {background-color: red;}
+        100% {background-color: yellow;}
+      }
