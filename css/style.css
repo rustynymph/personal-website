@@ -98,6 +98,10 @@ h6 {
   font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
 }
 
+.section-heading {
+  color: #4a545e !important;
+}
+
 .btn-primary {
     background-color: #F05F40;
     border-color: #F05F40;
@@ -190,3 +194,11 @@ h6 {
         50%  {background-color: red;}
         100% {background-color: yellow;}
       }
+
+#mainNav .navbar-nav > li.nav-item > a.nav-link,
+#mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
+  font-size: .9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #4a545e !important;
+}
